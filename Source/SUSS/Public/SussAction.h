@@ -8,6 +8,7 @@
 #include "UObject/Object.h"
 #include "SussAction.generated.h"
 
+class AAIController;
 struct FSussContext;
 class USussBrainComponent;
 
@@ -36,9 +37,12 @@ protected:
 	/// priority actions can interrupt
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	bool bAllowInterruptionsFromHigherPriorityGroupsOnly = false;
+	
+	UPROPERTY(Transient, BlueprintReadOnly)
+	TObjectPtr<AAIController> AIController = nullptr;
 
-	UPROPERTY(BlueprintReadOnly)
-	USussBrainComponent* Brain;
+	UPROPERTY(Transient, BlueprintReadOnly)
+	TObjectPtr<USussBrainComponent> Brain = nullptr;
 
 	UPROPERTY(BlueprintReadOnly)
 	FSussContext CurrentContext;
@@ -54,13 +58,7 @@ protected:
 	void Reset();
 public:
 
-	void Init(USussBrainComponent* InBrain, const FSussContext& InContext, int ActionIndex)
-	{
-		Brain = InBrain;
-		CurrentContext = InContext;
-		BrainActionIndex = ActionIndex;
-		Reset();
-	}
+	void Init(USussBrainComponent* InBrain, const FSussContext& InContext, int ActionIndex);
 
 
 	const FGameplayTag& GetActionTag() const { return ActionTag; }

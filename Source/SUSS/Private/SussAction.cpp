@@ -1,5 +1,4 @@
-﻿
-#include "SussAction.h"
+﻿#include "SussAction.h"
 
 #include "SussBrainComponent.h"
 
@@ -26,6 +25,15 @@ bool USussAction::CanBeInterrupted_Implementation() const
 void USussAction::Reset_Implementation()
 {
 	// Subclasses should implement
+}
+
+void USussAction::Init(USussBrainComponent* InBrain, const FSussContext& InContext, int ActionIndex)
+{
+	AIController = InBrain->GetAIController();
+	Brain = InBrain;
+	CurrentContext = InContext;
+	BrainActionIndex = ActionIndex;
+	Reset();
 }
 
 UWorld* USussAction::GetWorld() const
