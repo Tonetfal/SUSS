@@ -1471,7 +1471,7 @@ FString USussBrainComponent::GetDebugSummaryString() const
 			TEXT(
 				"Current Action: {yellow}%s{white}\nOriginal Score: {yellow}%4.2f{white}\nCurrent Score: {yellow}%4.2f{white}"),
 				Def.Description.IsEmpty() ? 
-					*CurrentActionInstance->GetClass()->GetName() :
+					(CurrentActionInstance.IsValid() ? *CurrentActionInstance->GetClass()->GetName() : TEXT("None")) : 
 					*Def.Description,
 				H.LastRunScore,
 				CurrentActionResult.Score);
