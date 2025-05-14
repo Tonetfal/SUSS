@@ -640,6 +640,10 @@ void USussBrainComponent::RecordAndResetCurrentAction()
 	// Repetition penalties are CUMULATIVE
 	History.RepetitionPenalty += CombinedActionsByPriority[CurrentActionResult.ActionDefIndex].RepetitionPenalty;
 
+	// Cancel any latent actions like delays
+	FLatentActionManager& LatentActionManager = GetWorld()->GetLatentActionManager();
+	LatentActionManager.RemoveActionsForObject(CurrentActionInstance.Get());
+
 	// This will free automatically
 	CurrentActionInstance = nullptr;
 	CurrentActionResult.ActionDefIndex = -1;
