@@ -13,6 +13,16 @@
 
 struct FSussActorPerceptionInfo;
 class AAIController;
+
+USTRUCT(BlueprintType)
+struct FSussParameters
+{
+	GENERATED_BODY()
+
+public:
+	TMap<FName, FSussParameter> Data;
+};
+
 /**
  * 
  */
@@ -64,11 +74,11 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, DisplayName="Run EQS Query With Target Context (SUSS)", meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "WrapperClass"))
 	static UEnvQueryInstanceBlueprintWrapper* RunEQSQueryWithTargetContextBP(AActor* Querier,
-	                                                                         AActor* Target,
-	                                                                         UEnvQuery* EQSQuery,
-	                                                                         const TMap<FName, FSussParameter>& Params,
-	                                                                         TEnumAsByte<EEnvQueryRunMode::Type> QueryMode =
-		                                                                         EEnvQueryRunMode::AllMatching);
+		AActor* Target,
+		UEnvQuery* EQSQuery,
+		FSussParameters Params,
+		TEnumAsByte<EEnvQueryRunMode::Type> QueryMode =
+			EEnvQueryRunMode::AllMatching);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FSussParameter MakeSussFloatParameter(float Val) { return FSussParameter(Val); }

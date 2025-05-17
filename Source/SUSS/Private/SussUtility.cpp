@@ -182,7 +182,7 @@ TSharedPtr<FEnvQueryResult> USussUtility::RunEQSQueryWithTargetContext(AActor* Q
 UEnvQueryInstanceBlueprintWrapper* USussUtility::RunEQSQueryWithTargetContextBP(AActor* Querier,
 	AActor* Target,
 	UEnvQuery* EQSQuery,
-	const TMap<FName, FSussParameter>& Params,
+	FSussParameters Params,
 	TEnumAsByte<EEnvQueryRunMode::Type> QueryMode)
 {
 	UEnvQueryInstanceBlueprintWrapper* Wrapper = nullptr;
@@ -197,7 +197,7 @@ UEnvQueryInstanceBlueprintWrapper* USussUtility::RunEQSQueryWithTargetContextBP(
 			EQSSub->SetTargetInfo(Querier, Target);
 		}
 		TArray<FEnvNamedValue> QueryParams;
-		USussUtility::AddEQSParams(Params, QueryParams);
+		USussUtility::AddEQSParams(Params.Data, QueryParams);
 		auto Ret = RunEQSQuery(Querier, EQSQuery, QueryParams, QueryMode);
 
 		// Clear temp context info
