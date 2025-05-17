@@ -304,8 +304,10 @@ void USussGameSubsystem::RegisterQueryProviderClass(TSubclassOf<USussQueryProvid
 	{
 		UE_LOG(LogSuss, Error, TEXT("Bad call to RegisterQueryProvider, invalid class (no CDO)"))
 	}
-	RegisterQueryProvider(CDO);
-	
+	else
+	{
+		RegisterQueryProvider(CDO);
+	}
 }
 
 void USussGameSubsystem::UnregisterQueryProvider(USussQueryProvider* Provider)
