@@ -6,6 +6,7 @@
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Float.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Int.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_SussInputBlackboardFloat, "Suss.Input.Blackboard.Float", "Get a float value from the blackboard, requires Name parameter 'Key'.")
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_SussInputBlackboardBool, "Suss.Input.Blackboard.Bool", "Get a boolean value from the blackboard, as 1 or 0 for True/False, requires Name parameter 'Key'.")
@@ -78,6 +79,10 @@ float USussBlackboardAutoInputProvider::Evaluate_Implementation(const USussBrain
 			if (KeyType == UBlackboardKeyType_Bool::StaticClass())
 			{
 				return BB->GetValue<UBlackboardKeyType_Bool>(KeyID) ? 1.0f : 0.0f;
+			}
+			if (KeyType == UBlackboardKeyType_Object::StaticClass())
+			{
+				return IsValid(BB->GetValue<UBlackboardKeyType_Object>(KeyID));
 			}
 		}
 	}
