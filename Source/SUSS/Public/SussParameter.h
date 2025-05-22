@@ -31,7 +31,7 @@ enum class ESussParamType : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FSussParameter
+struct SUSS_API FSussParameter
 {
 	GENERATED_BODY()
 

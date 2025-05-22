@@ -4,6 +4,7 @@
 
 #include "IDetailCustomization.h"
 
+struct FSussConsideration;
 enum class ESussCurveType : uint8;
 class SSSussCurveVisualization;
 class SCurveEditor;
@@ -19,12 +20,9 @@ public:
 	//~ End IDetailCustomization Interface
 
 private:
-	FVector4f GetCurveParams() const;
-	ESussCurveType GetCurveType() const;
+	FSussConsideration GetConsideration() const;
 
 private:
 	TSharedPtr<IPropertyHandle> MyStructHandle;
-	TSharedPtr<IPropertyHandle> CurveParamsHandle;
-	TSharedPtr<IPropertyHandle> CurveTypeHandle;
 	TSharedPtr<SSSussCurveVisualization> CurveVisualization;
 };

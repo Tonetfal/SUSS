@@ -36,11 +36,6 @@ void FSussConsiderationCustomization::CustomizeChildren(
 	IDetailChildrenBuilder& ChildBuilder,
 	IPropertyTypeCustomizationUtils& CustomizationUtils)
 {
-	CurveTypeHandle = MyStructHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FSussConsideration, CurveType));
-	CurveParamsHandle = MyStructHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FSussConsideration, CurveParams));
-
-	
-	
 	// Add existing children
 	uint32 NumChildren;
 	MyStructHandle->GetNumChildren(NumChildren);
@@ -71,45 +66,28 @@ void FSussConsiderationCustomization::CustomizeChildren(
 		[
 			SAssignNew(CurveVisualization, SSSussCurveVisualization)
 			.DesiredSize(FVector2D(300, 200))
-			.OnGetCurveParams(this, &FSussConsiderationCustomization::GetCurveParams)
-			.OnGetCurveType(this, &FSussConsiderationCustomization::GetCurveType)
+			.OnGetConsideration(this, &FSussConsiderationCustomization::GetConsideration)
 			.ViewMinInput(0.f)
-			.ViewMaxInput(1.f)
+			.ViewMaxInput(1.0f)
 			.ViewMinOutput(0.f)
-			.ViewMaxOutput(1.f)
+			.ViewMaxOutput(1.0f)
 		]
 	];
 }
 
-FVector4f FSussConsiderationCustomization::GetCurveParams() const
+FSussConsideration FSussConsiderationCustomization::GetConsideration() const
 {
-	const FVector4f* CurveParams = nullptr;
+	if (ensureMsgf(MyStructHandle, TEXT("Struct handle is missing")))
 	{
-		checkf(CurveParamsHandle, TEXT("No Curve Params Handle :(( "))
 		void* Data = nullptr;
-		if (CurveParamsHandle->GetValueData(Data) != FPropertyAccess::Fail)
+		if (MyStructHandle->GetValueData(Data) != FPropertyAccess::Fail)
 		{
-			CurveParams = static_cast<FVector4f*>(Data);
+			const FSussConsideration* Consideration = static_cast<FSussConsideration*>(Data);
+			return *Consideration;
 		}
 	}
 
-	return *CurveParams;
+	return {};
 }
-
-ESussCurveType FSussConsiderationCustomization::GetCurveType() const
-{
-	const ESussCurveType* CurveType = nullptr;
-	{
-		checkf(CurveTypeHandle, TEXT("No Curve  Type Handle :(( "))
-		void* Data = nullptr;
-		if (CurveTypeHandle->GetValueData(Data) != FPropertyAccess::Fail)
-		{
-			CurveType = static_cast<ESussCurveType*>(Data);
-		}
-	}
-
-	return *CurveType;
-}
-
 
 #undef LOCTEXT_NAMESPACE

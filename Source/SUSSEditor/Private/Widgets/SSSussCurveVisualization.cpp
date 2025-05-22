@@ -14,8 +14,7 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSSussCurveVisualization::Construct(const FArguments& InArgs)
 {
 	DesiredSize = InArgs._DesiredSize;
-	OnGetCurveParams = InArgs._OnGetCurveParams;
-	OnGetCurveType = InArgs._OnGetCurveType;
+	OnGetConsideration = InArgs._OnGetConsideration;
 
 	ViewMinInput = InArgs._ViewMinInput;
 	ViewMaxInput = InArgs._ViewMaxInput;
@@ -308,45 +307,44 @@ void SSSussCurveVisualization::PaintCurve(
 	CurveSamples.Reserve(static_cast<int32>(1.f / CurveSampleStep));
 
 	// Sample the curve
-	const ESussCurveType CurveType = OnGetCurveType.Execute();
-	const FVector4f CurveParams = OnGetCurveParams.Execute();
+	const FSussConsideration Consideration = OnGetConsideration.Execute();
 	for (float X = 0.f; X <= 1.f + CurveSampleStep; X += CurveSampleStep)
 	{
-		float Y = USussUtility::EvalCurve(CurveType, X, CurveParams);
+		float Y = Consideration.EvaluateCurve(X);
 
 		CurveSamples.Add(TPair<float, float>(X, Y));
 	}
 
 	// Add arrive and exit lines, skip if out of bounds
-	{
-		float ArriveX = ScaleInfo.InputToLocalX(CurveSamples[0].Key);
-		float ArriveY = ScaleInfo.OutputToLocalY(CurveSamples[0].Value);
-		float LeaveX = ScaleInfo.InputToLocalX(CurveSamples.Last().Key);
-		float LeaveY = ScaleInfo.OutputToLocalY(CurveSamples.Last().Value);
-		float WidgetWidth = AllottedGeometry.GetLocalSize().X;
-		float WidgetHeight = AllottedGeometry.GetLocalSize().Y;
-
-		// Arrival
-		if (ArriveX >= 0.0f && ArriveX <= WidgetWidth &&
-			ArriveY >= 0.0f && ArriveY <= WidgetHeight)
-		{
-			CurvePoints.Add(FVector2D(0.0f, ArriveY));
-			CurvePoints.Add(FVector2D(ArriveX, ArriveY));
-			FSlateDrawElement::MakeLines(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(), CurvePoints,
-										 DrawEffects, CurveColor);
-			CurvePoints.Empty();
-		}
-		// LEave
-		if (LeaveX >= 0.0f && LeaveX <= WidgetWidth &&
-			LeaveY >= 0.0f && LeaveY <= WidgetHeight)
-		{
-			CurvePoints.Add(FVector2D(WidgetWidth, LeaveY));
-			CurvePoints.Add(FVector2D(LeaveX, LeaveY));
-			FSlateDrawElement::MakeLines(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(), CurvePoints,
-										 DrawEffects, CurveColor);
-			CurvePoints.Empty();
-		}
-	}
+	// {
+	// 	float ArriveX = ScaleInfo.InputToLocalX(CurveSamples[0].Key);
+	// 	float ArriveY = ScaleInfo.OutputToLocalY(CurveSamples[0].Value);
+	// 	float LeaveX = ScaleInfo.InputToLocalX(CurveSamples.Last().Key);
+	// 	float LeaveY = ScaleInfo.OutputToLocalY(CurveSamples.Last().Value);
+	// 	float WidgetWidth = AllottedGeometry.GetLocalSize().X;
+	// 	float WidgetHeight = AllottedGeometry.GetLocalSize().Y;
+	//
+	// 	// Arrival
+	// 	if (ArriveX >= 0.0f && ArriveX <= WidgetWidth &&
+	// 		ArriveY >= 0.0f && ArriveY <= WidgetHeight)
+	// 	{
+	// 		CurvePoints.Add(FVector2D(0.0f, ArriveY));
+	// 		CurvePoints.Add(FVector2D(ArriveX, ArriveY));
+	// 		FSlateDrawElement::MakeLines(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(), CurvePoints,
+	// 									 DrawEffects, CurveColor);
+	// 		CurvePoints.Empty();
+	// 	}
+	// 	// LEave
+	// 	if (LeaveX >= 0.0f && LeaveX <= WidgetWidth &&
+	// 		LeaveY >= 0.0f && LeaveY <= WidgetHeight)
+	// 	{
+	// 		CurvePoints.Add(FVector2D(WidgetWidth, LeaveY));
+	// 		CurvePoints.Add(FVector2D(LeaveX, LeaveY));
+	// 		FSlateDrawElement::MakeLines(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(), CurvePoints,
+	// 									 DrawEffects, CurveColor);
+	// 		CurvePoints.Empty();
+	// 	}
+	// }
 
 	// Make Curve points
 	for (const TPair<float, float>& Sample : CurveSamples)

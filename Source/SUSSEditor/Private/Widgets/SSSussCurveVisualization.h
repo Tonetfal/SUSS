@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SussCommon.h"
+#include "SussConsideration.h"
 #include "Widgets/SCompoundWidget.h"
 
 struct FTrackScaleInfo;
@@ -12,8 +12,7 @@ struct FTrackScaleInfo;
 class SSSussCurveVisualization : public SCompoundWidget
 {
 public:
-	DECLARE_DELEGATE_RetVal(FVector4f, FOnGetCurveParams);
-	DECLARE_DELEGATE_RetVal(ESussCurveType, FOnGetCurveType);
+	DECLARE_DELEGATE_RetVal(FSussConsideration, FOnGetConsideration);
 	
 	SLATE_BEGIN_ARGS(SSSussCurveVisualization)
 		: _DesiredSize(FVector2D::ZeroVector)
@@ -28,8 +27,7 @@ public:
 		SLATE_ATTRIBUTE(float, ViewMaxInput)
 		SLATE_ATTRIBUTE(float, ViewMinOutput)
 		SLATE_ATTRIBUTE(float, ViewMaxOutput)
-		SLATE_EVENT(FOnGetCurveParams, OnGetCurveParams)
-		SLATE_EVENT(FOnGetCurveType, OnGetCurveType)
+		SLATE_EVENT(FOnGetConsideration, OnGetConsideration)
 	SLATE_END_ARGS()
 
 public:
@@ -57,8 +55,7 @@ protected:
 
 private:
 	TAttribute<FVector2D> DesiredSize;
-	FOnGetCurveParams OnGetCurveParams;
-	FOnGetCurveType OnGetCurveType;
+	FOnGetConsideration OnGetConsideration;
 
 	float DefaultMinInput = 0.f;
 	float DefaultMaxInput = 0.f;
